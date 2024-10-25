@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:title="Spinner"
+        app:titleTextColor="@color/white"/>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select A department"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinnerbackground"
+        android:layout_marginTop="15dp">
+        <Spinner
+            app:layout_constraintStart_toStartOf='parent'
+            app:layout_constraintTop_toTopOf='parent'
+            android:id="@+id/dept"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
+
+package com.example.l8
+import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        val dept: Spinner = findViewById(R.id.dept)
+        val dept_array = resources.getStringArray(R.array.dept_array)
+        if(dept != null){
+            val adapter = ArrayAdapter(this,android.R.layout.simple_spinner_item,dept_array)
+            dept.adapter = adapter
+            dept.onItemSelectedListener = object :
+                AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(parent: AdapterView<*>,view: View,position: Int,id: Long) {Toast.makeText(this@MainActivity,"selected item"+" "+" "+dept_array[position],Toast.LENGTH_SHORT).show()}
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple_200">#FFFFF200</color>
+</resources>
+
+<?xml version="1.0" encoding="utf-8" ?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/transparent"/>
+    <corners android:radius="5dp"/>
+    <stroke
+        android:width="2dp"
+        android:color="@color/purple_200"
+        />
+</shape>
+
+<resources>
+    <string name="app_name">l8</string>
+    <string name="selected_item">Selected Item</string>
+    <string-array name="dept_array">
+        <item>ICT</item>
+        <item>DEG</item>
+        <item>AI</item>
+        <item>SNT</item>
+    </string-array>
+</resources>
