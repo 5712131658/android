@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="BMI Calculator"
+        app:titleMarginStart="150dp"
+        app:titleTextColor="@android:color/black" />
+    <TextView
+        android:id="@+id/textView_BMI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:gravity="center_horizontal"
+        android:text="BMI Calculator"
+        android:textSize="35sp" />
+    <TextView
+        android:id="@+id/textView_number1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Height in cm :"
+        android:textSize="20sp" />
+    <EditText
+        android:id="@+id/editText_number1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="-35dp"
+        android:background="@android:drawable/editbox_background"
+        android:gravity="center_horizontal"
+        android:hint="0"
+        android:inputType="number" />
+    <TextView
+        android:id="@+id/textView_number2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Weight in kg :"
+        android:textSize="20sp" />
+    <EditText
+        android:id="@+id/editText_number2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="-35dp"
+        android:background="@android:drawable/editbox_background"
+        android:gravity="center_horizontal"
+        android:hint="0"
+        android:inputType="number" />
+    <Button
+        android:id="@+id/button_calculate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@android:color/black"
+        android:text="Calculate"
+        android:textColor="@color/black"
+        android:textSize="30sp" />
+</LinearLayout>
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="BMI Calculator"
+        app:titleMarginStart="150dp"
+        app:titleTextColor="@android:color/black"
+        />
+    <TextView
+        android:id="@+id/textView_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/c1"
+        android:gravity="center"
+        android:text="Result"
+        android:textSize="85sp"
+        android:textStyle="bold"
+        />
+    <Button
+        android:id="@+id/returnback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="go back"
+        />
+</LinearLayout>
+
+package com.example.project
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+class MainActivity : AppCompatActivity() {
+    lateinit var editText_number1: EditText
+    lateinit var editText_number2: EditText
+    lateinit var button_calculate : Button
+    lateinit var textView_result: TextView
+    lateinit var returnback: Button
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        editText_number1 = findViewById(R.id.editText_number1)
+        editText_number2 = findViewById(R.id.editText_number2)
+        button_calculate = findViewById(R.id.button_calculate)
+        button_calculate.setOnClickListener {
+            val num1 = editText_number1.text.toString().toInt()
+            val num2 = editText_number2.text.toString().toFloat()
+            val res = num1 * num1
+            val res1 = num2 / res
+            val res2 = res1 * 10000
+        setContentView(R.layout.layout)
+            textView_result = findViewById(R.id.textView_result)
+            val returnback: Button = findViewById(R.id.returnback)
+            if (res2 < 18.5) {
+                textView_result.text = "Your BMI is " + res2.toString() + " and you are Under Weight"
+            }
+            if (res2 >= 18.5 && res2 < 25){
+                textView_result.text = "Your BMI is " + res2.toString() + " and you are in the Healthy Weight Range"
+            }
+            if (res2 >= 25 && res2 < 30){
+                textView_result.text = "Your BMI is " + res2.toString() + " and you are Over Weight"
+            }
+            if (res2 >= 30){
+                textView_result.text = "Your BMI is " + res2.toString() + " and you are Obese"
+            }
+            returnback.setOnClickListener {
+                finish()
+            }
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="c1">#FF0</color>
+</resources>
