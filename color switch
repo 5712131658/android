@@ -16,12 +16,14 @@
         app:titleMarginStart="150dp"
         app:titleTextColor="@android:color/black" />
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="colour text changer"
         android:textAlignment="center"
         android:textStyle="bold"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        tools:ignore="InvalidId" />
     <CheckBox
         android:id="@+id/checkred"
         android:layout_width="wrap_content"
@@ -57,7 +59,6 @@
 </LinearLayout>
 
 package com.example.l7
-
 import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.CompoundButton
@@ -67,7 +68,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
 class MainActivity : AppCompatActivity() {
     lateinit var title:TextView
     lateinit var checkred:CheckBox
@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        title = findViewById(R.id.title)
         checkred = findViewById(R.id.checkred)
         checkblue = findViewById(R.id.checkblue)
         checkgreen = findViewById(R.id.checkgreen)
@@ -129,13 +130,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#FF1234</color>
-    <color name="blue">#0000FF</color>
-    <color name="green">#009000</color>
-    <color name="yellow">#FFFF19</color>
-</resources>
