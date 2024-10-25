@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="api call"
+        app:titleMarginStart="150dp"
+        app:titleTextColor="@color/black"
+        />
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="location"
+        android:fontFamily="sans-serif-thin"
+        />
+    <TextView
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="0°C"
+        android:fontFamily="sans-serif-thin"
+        />
+    <TextView
+        android:id="@+id/weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="a"
+        android:fontFamily="sans-serif-thin"
+        />
+    <TextView
+        android:id="@+id/mintemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_marginRight="10dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="0°C"
+        android:fontFamily="sans-serif-thin"
+        />
+    <TextView
+        android:id="@+id/maxtemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-65dp"
+        android:layout_marginLeft="250dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="0°C"
+        android:fontFamily="sans-serif-thin"
+        />
+</LinearLayout>
+
+package com.example.l9
+import android.os.Bundle
+import android.util.Log
+import  android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.android.volley.toolbox.Volley
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.Request
+import com.android.volley.Response
+import org.json.JSONObject
+class MainActivity : AppCompatActivity() {
+    val CITY:String = "Singapore"
+    val API:String = "93fbd5d943b7f543c9fa158ca986c2e7"
+    val URL:String = "https://api.openweathermap.org/data/2.5/weather?q=$CITY&units=metric&appid=$API"
+    lateinit var location :TextView
+    lateinit var temperature : TextView
+    lateinit var weather : TextView
+    lateinit var mintemperature : TextView
+    lateinit var maxtemperature : TextView
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        location = findViewById(R.id.location)
+        temperature = findViewById(R.id.temperature)
+        weather = findViewById(R.id.weather)
+        mintemperature = findViewById(R.id.mintemperature)
+        maxtemperature = findViewById(R.id.maxtemperature)
+        obtainLocation()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+    fun obtainLocation(){
+        Log.e("url",URL)
+        val queue = Volley.newRequestQueue(this)
+        val stringReg = StringRequest(Request.Method.GET,URL,Response.Listener<String>()
+        { response:String? ->
+            var strResp = response.toString()
+            Log.e("Response",strResp)
+            val jsonObj = JSONObject(strResp)
+            val main = jsonObj.getJSONObject("main")
+            val temp = main.getString("temp")
+            val Mintemperature = main.getString("temp_min")
+            val Maxtemperature = main.getString("temp_max")
+            val Weather = jsonObj.getJSONArray("weather").getJSONObject(0).getString("description")
+            location.setText(CITY)
+            temperature.setText(temp + "°C")
+            weather.text = "$Weather"
+            mintemperature.text = "$Mintemperature°C"
+            maxtemperature.text = "$Maxtemperature°C"
+        },Response.ErrorListener {})
+        queue.add(stringReg)
+    }
+}
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+}
+android {
+    namespace = "com.example.l9"
+    compileSdk = 34
+    defaultConfig {
+        applicationId = "com.example.l9"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("com.google.android.material:material:1.7.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.android.volley:volley:1.2.1")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test/ext:junit:1.1.4")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.L9"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
