@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Lab 7 checkboxes"
+        app:titleMarginStart="150dp"
+        app:titleTextColor="@android:color/black" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="colour text changer"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="30sp"/>
+    <CheckBox
+        android:id="@+id/checkred"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="red"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
+    <CheckBox
+        android:id="@+id/checkgreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="green"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
+    <CheckBox
+        android:id="@+id/checkyellow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="yellow"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
+    <CheckBox
+        android:id="@+id/checkblue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="blue"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
+</LinearLayout>
+
+package com.example.l7
+
+import android.os.Bundle
+import android.widget.CheckBox
+import android.widget.CompoundButton
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
+class MainActivity : AppCompatActivity() {
+    lateinit var title:TextView
+    lateinit var checkred:CheckBox
+    lateinit var checkblue:CheckBox
+    lateinit var checkgreen:CheckBox
+    lateinit var checkyellow:CheckBox
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        checkred = findViewById(R.id.checkred)
+        checkblue = findViewById(R.id.checkblue)
+        checkgreen = findViewById(R.id.checkgreen)
+        checkyellow = findViewById(R.id.checkyellow)
+        checkred.setOnCheckedChangeListener {buttonView: CompoundButton, isChecked : Boolean ->
+            if (checkred.isChecked){
+                checkblue.isChecked = false
+                checkgreen.isChecked = false
+                checkyellow.isChecked = false
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.red))
+            }else{
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.black))
+            }
+        }
+        checkblue.setOnCheckedChangeListener {buttonView: CompoundButton, isChecked : Boolean ->
+            if (checkblue.isChecked){
+                checkred.isChecked = false
+                checkgreen.isChecked = false
+                checkyellow.isChecked = false
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.blue))
+            }else{
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.black))
+            }
+        }
+        checkgreen.setOnCheckedChangeListener {buttonView: CompoundButton, isChecked : Boolean ->
+            if (checkgreen.isChecked){
+                checkblue.isChecked = false
+                checkred.isChecked = false
+                checkyellow.isChecked = false
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.green))
+            }else{
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.black))
+            }
+        }
+        checkyellow.setOnCheckedChangeListener {buttonView: CompoundButton, isChecked : Boolean ->
+            if (checkyellow.isChecked){
+                checkblue.isChecked = false
+                checkgreen.isChecked = false
+                checkred.isChecked = false
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.yellow))
+            }else{
+                title.setTextColor(ContextCompat.getColor(this@MainActivity,R.color.black))
+            }
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF1234</color>
+    <color name="blue">#0000FF</color>
+    <color name="green">#009000</color>
+    <color name="yellow">#FFFF19</color>
+</resources>
