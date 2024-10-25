@@ -1,0 +1,168 @@
+<?xml version="1.0"     encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Calculate"
+        app:titleTextColor="@android:color/white"
+        app:titleMarginStart="150dp"
+        />
+    <TextView
+        android:id="@+id/textView_number1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="First Number"
+        android:textSize="20sp"
+        />
+    <EditText
+        android:id="@+id/editText_number1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="-35dp"
+        android:hint="Enter first number"
+        android:inputType="number"
+        android:gravity="center_horizontal"
+        />
+    <TextView
+        android:id="@+id/textView_number2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Second Number"
+        android:textSize="20sp"
+        />
+    <EditText
+        android:id="@+id/editText_number2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="220dp"
+        android:layout_marginTop="-35dp"
+        android:inputType="number"
+        android:hint="Enter second number"
+        android:gravity="center_horizontal"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/button_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/black"
+            android:text="+"
+            android:textSize="50sp"
+            />
+        <Button
+            android:id="@+id/button_subtract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/black"
+            android:text="-"
+            android:textSize="50sp"
+            />
+        <Button
+            android:id="@+id/button_divide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/black"
+            android:text="/"
+            android:textSize="50sp"
+            />
+        <Button
+            android:id="@+id/button_multiply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/black"
+            android:text="*"
+            android:textSize="50sp"
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/textView_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Result"
+        android:textSize="120sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        />
+</LinearLayout>
+
+package com.example.l4
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+class MainActivity : AppCompatActivity() {
+    lateinit var editText_number1: EditText
+    lateinit var editText_number2: EditText
+    lateinit var button_add :Button
+    lateinit var button_subtract :Button
+    lateinit var button_divide :Button
+    lateinit var button_multiply :Button
+    lateinit var textView_result: TextView
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
+        editText_number1 = findViewById(R.id.editText_number1)
+        editText_number2 = findViewById(R.id.editText_number2)
+        button_add = findViewById(R.id.button_add)
+        button_subtract = findViewById(R.id.button_subtract)
+        button_multiply = findViewById(R.id.button_multiply)
+        button_divide = findViewById(R.id.button_divide)
+        textView_result = findViewById(R.id.textView_result)
+        button_add.setOnClickListener {
+            val num1 = editText_number1.text.toString().toInt()
+            val num2 = editText_number2.text.toString().toInt()
+            val res = num1 + num2
+            textView_result.text = res.toString()
+        }
+        button_subtract.setOnClickListener {
+            val num1 = editText_number1.text.toString().toInt()
+            val num2 = editText_number2.text.toString().toInt()
+            val res = num1 - num2
+            textView_result.text = res.toString()
+        }
+        button_divide.setOnClickListener {
+            val num1 = editText_number1.text.toString().toInt()
+            val num2 = editText_number2.text.toString().toInt()
+            val res = num1 / num2
+            textView_result.text = res.toString()
+        }
+        button_multiply.setOnClickListener {
+            val num1 = editText_number1.text.toString().toInt()
+            val num2 = editText_number2.text.toString().toInt()
+            val res = num1 * num2
+            textView_result.text = res.toString()
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+}
